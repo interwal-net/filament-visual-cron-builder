@@ -6,3 +6,6 @@ composer.lock
 .DS_Store
 /.idea
 /.vscode
+/workbench/.env
+*.sqlite
+/build

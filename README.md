@@ -70,6 +70,23 @@ Cron::humanReadable('30 4 * * 1-5');         // -> 'At 04:30 on Monday-Friday'
 Cron::isValid('30 4 * * 1-5');               // -> true
 ```
 
+## Demo
+
+A bootable Filament panel lives in `workbench/` (via Testbench). It exposes a
+`ScheduleResource` using `CronBuilder`, seeded with sample expressions.
+
+```bash
+composer serve
+```
+
+Then open <http://127.0.0.1:8000/admin> and log in with:
+
+- email: `demo@example.com`
+- password: `password`
+
+Edit the "Every 15 min, business hours" record (`*/15 4,12,20 * * 1-5`) to see the
+columns parse back from an existing string.
+
 ## Testing
 
 ```bash

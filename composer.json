@@ -26,6 +26,7 @@
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
+        "filament/filament": "^4.0",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.18",
         "orchestra/testbench": "^9.0 || ^10.0",
@@ -39,7 +40,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "InterwalNet\\CronBuilder\\Tests\\": "tests/"
+            "InterwalNet\\CronBuilder\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "config": {
@@ -57,6 +61,15 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": "@prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "demo:db": "@php vendor/bin/testbench migrate:fresh --seed --seeder=\"Workbench\\Database\\Seeders\\DatabaseSeeder\" --force --ansi",
+        "serve": [
+            "@build",
+            "@demo:db",
+            "@php vendor/bin/testbench serve"
+        ],
         "test": "vendor/bin/pest",
         "format": "vendor/bin/pint"
     },

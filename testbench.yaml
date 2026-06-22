@@ -1,0 +1,17 @@
+providers:
+  - Workbench\App\Providers\Filament\AdminPanelProvider
+
+migrations:
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/admin'
+  install: true
+  discovers:
+    web: true
+  build:
+    - asset-publish
+    - create-sqlite-db

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Workbench demo panel (`composer serve`) with a `ScheduleResource` and seeded
+  sample expressions, for manual verification and screenshots. Dev-only.
+
 ## [1.0.0] - 2026-06-22
 
 ### Added
