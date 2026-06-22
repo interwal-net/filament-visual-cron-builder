@@ -1,0 +1,25 @@
+name: Bug report
+description: Report a problem with the cron builder field
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: Steps, and the cron expression / field config involved.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Package / Filament / PHP versions
+      placeholder: "1.0.0 / Filament 4.x / PHP 8.4"
+    validations:
+      required: true
