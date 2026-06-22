@@ -77,6 +77,10 @@ composer test     # vendor/bin/pest
 composer format   # vendor/bin/pint
 ```
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
