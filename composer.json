@@ -1,0 +1,65 @@
+{
+    "name": "interwal-net/filament-visual-cron-builder",
+    "description": "A reusable Filament v4 form field that builds cron expressions visually with native selects - no JS bundle.",
+    "keywords": [
+        "filament",
+        "filamentphp",
+        "laravel",
+        "cron",
+        "scheduler",
+        "form-field"
+    ],
+    "homepage": "https://github.com/interwal-net/filament-visual-cron-builder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Walaski",
+            "email": "robert@walaski.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "dragonmantank/cron-expression": "^3.3",
+        "filament/forms": "^4.0",
+        "illuminate/contracts": "^11.0 || ^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.0 || ^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "InterwalNet\\CronBuilder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "InterwalNet\\CronBuilder\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "InterwalNet\\CronBuilder\\CronBuilderServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

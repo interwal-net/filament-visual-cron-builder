@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+use InterwalNet\CronBuilder\Tests\Fixtures\FormComponent;
+use InterwalNet\CronBuilder\Tests\TestCase;
+use Livewire\Livewire;
+
+uses(TestCase::class);
+
+it('hydrates an existing cron string into column state', function () {
+    $component = Livewire::test(FormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']]);
+
+    $data = $component->get('data');
+
+    expect($data['schedule']['minute'])->toMatchArray(['mode' => 'step', 'step' => '15'])
+        ->and($data['schedule']['hour'])->toMatchArray(['mode' => 'specific', 'values' => ['4', '12', '20']])
+        ->and($data['schedule']['day']['mode'])->toBe('every')
+        ->and($data['schedule']['month']['mode'])->toBe('every')
+        ->and($data['schedule']['weekday'])->toMatchArray(['mode' => 'range', 'from' => '1', 'to' => '5']);
+});
+
+it('dehydrates column state back to the same cron string', function () {
+    $state = Livewire::test(FormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']])
+        ->instance()
+        ->form
+        ->getState();
+
+    expect($state['schedule'])->toBe('*/15 4,12,20 * * 1-5');
+});
+
+it('defaults an empty field to every-minute', function () {
+    $state = Livewire::test(FormComponent::class)
+        ->instance()
+        ->form
+        ->getState();
+
+    expect($state['schedule'])->toBe('* * * * *');
+});
+
+it('renders the builder columns and the live preview', function () {
+    Livewire::test(FormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']])
+        ->assertOk()
+        ->assertSee('schedule.minute.mode')
+        ->assertSee('*/15 4,12,20 * * 1-5');
+});
+
+it('loads the package translations (namespace resolves)', function () {
+    expect(trans('cron-builder::cron-builder.modes.every'))->toBe('Every')
+        ->and(trans('cron-builder::cron-builder.positions.minute'))->toBe('Minute');
+});
+
+it('recomposes the cron string after a column is changed', function () {
+    $component = Livewire::test(FormComponent::class, ['data' => ['schedule' => '* * * * *']])
+        ->set('data.schedule.minute.mode', 'step')
+        ->set('data.schedule.minute.step', '15');
+
+    $state = $component->instance()->form->getState();
+
+    expect($state['schedule'])->toBe('*/15 * * * *');
+});
