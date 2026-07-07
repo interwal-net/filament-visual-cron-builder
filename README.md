@@ -1,6 +1,6 @@
 # Filament Visual Cron Builder
 
-A reusable [Filament v4](https://filamentphp.com) form field that builds cron
+A reusable [Filament v4/v5](https://filamentphp.com) form field that builds cron
 expressions visually with native selects. No cron syntax knowledge required, no
 JS bundle - the compose/parse logic lives in PHP.
 
@@ -19,6 +19,16 @@ to a cron column: its saved state is a standard 5-field cron string.
 - Live human-readable preview + raw expression + optional next-run date.
 - Round-trips: editing a record parses the existing string back into the columns.
 - All compose/parse/validation logic is plain, unit-tested PHP.
+
+## Compatibility
+
+| Package | Filament  | Livewire            | Laravel        | PHP                          |
+|---------|-----------|---------------------|----------------|------------------------------|
+| 1.1+    | 4.x / 5.x | 3.x (F4) / 4.x (F5) | 11.28+, 12, 13 | 8.2+ (Laravel 13 needs 8.3+) |
+| 1.0     | 4.x       | 3.x                 | 11, 12         | 8.2+                         |
+
+Livewire is not a direct dependency - the correct major is pulled in by the
+Filament version you install.
 
 ## Installation
 
@@ -45,6 +55,20 @@ use InterwalNet\CronBuilder\CronBuilder;
 CronBuilder::make('schedule')
     ->showNextRun()      // toggle the next-run preview (default: from config)
     ->required();
+```
+
+The field is `live()` by default so the preview recomputes on every change.
+`->live()`, `->afterStateUpdated()` and the other state binding modifiers work
+like on any Filament field:
+
+```php
+CronBuilder::make('schedule')
+    ->live(debounce: 500)   // or ->live(onBlur: true), ->live(condition: false)
+    ->afterStateUpdated(function (CronBuilder $component) {
+        // While editing, the state is the 5-column array; use the helper to
+        // get the composed cron string:
+        $cron = $component->getComposedExpression();
+    });
 ```
 
 Validate the saved string anywhere with the bundled rule:

@@ -20,6 +20,6 @@ body:
     id: versions
     attributes:
       label: Package / Filament / PHP versions
-      placeholder: "1.0.0 / Filament 4.x / PHP 8.4"
+      placeholder: "1.1.0 / Filament 5.x / PHP 8.4"
     validations:
       required: true

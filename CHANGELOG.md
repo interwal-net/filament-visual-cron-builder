@@ -7,10 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-07
+
 ### Added
 
+- Filament v5 / Livewire v4 support, alongside existing Filament v4 / Livewire v3
+  (`filament/forms: ^4.0 || ^5.0`). No code changes were needed - the field has
+  no JS bundle and the Filament v5 field API is unchanged.
+- Laravel 13 support (`illuminate/contracts: ^11.28 || ^12.0 || ^13.0`; requires
+  PHP 8.3+ on Laravel 13).
 - Workbench demo panel (`composer serve`) with a `ScheduleResource` and seeded
   sample expressions, for manual verification and screenshots. Dev-only.
+- CI now tests the full PHP x Laravel x Filament matrix.
+- `->live()` overrides (`onBlur`, `debounce`, `condition: false`) - the field
+  is live by default, but the binding modifiers are no longer hard-coded in
+  the view.
+- `->afterStateUpdated()` fires when any column of the builder changes.
+
+### Changed
+
+- Minimum `illuminate/contracts` raised from `^11.0` to `^11.28` (Filament's own
+  floor; no practical impact).
 
 ## [1.0.0] - 2026-06-22
 
@@ -27,5 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ValidCronExpression` validation rule.
 - English translations, publishable config and views.
 
-[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/interwal-net/filament-visual-cron-builder/releases/tag/v1.0.0

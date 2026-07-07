@@ -19,28 +19,28 @@
                         {{ $label }}
                     </span>
 
-                    <select wire:model.live="{{ $statePath }}.{{ $key }}.mode" class="{{ $selectClass }}">
+                    <select {{ $applyStateBindingModifiers('wire:model') }}="{{ $statePath }}.{{ $key }}.mode" class="{{ $selectClass }}">
                         @foreach ($modeOptions as $value => $modeLabel)
                             <option value="{{ $value }}">{{ $modeLabel }}</option>
                         @endforeach
                     </select>
 
                     @if ($mode === 'specific')
-                        <select multiple wire:model.live="{{ $statePath }}.{{ $key }}.values" class="{{ $selectClass }}" size="5">
+                        <select multiple {{ $applyStateBindingModifiers('wire:model') }}="{{ $statePath }}.{{ $key }}.values" class="{{ $selectClass }}" size="5">
                             @foreach ($getValueOptions($key) as $value => $optionLabel)
                                 <option value="{{ $value }}">{{ $optionLabel }}</option>
                             @endforeach
                         </select>
                     @elseif ($mode === 'range')
                         <div class="flex items-center gap-2">
-                            <select wire:model.live="{{ $statePath }}.{{ $key }}.from" class="{{ $selectClass }}">
+                            <select {{ $applyStateBindingModifiers('wire:model') }}="{{ $statePath }}.{{ $key }}.from" class="{{ $selectClass }}">
                                 <option value="">{{ __('cron-builder::cron-builder.fields.from') }}</option>
                                 @foreach ($getValueOptions($key) as $value => $optionLabel)
                                     <option value="{{ $value }}">{{ $optionLabel }}</option>
                                 @endforeach
                             </select>
                             <span class="text-gray-400">-</span>
-                            <select wire:model.live="{{ $statePath }}.{{ $key }}.to" class="{{ $selectClass }}">
+                            <select {{ $applyStateBindingModifiers('wire:model') }}="{{ $statePath }}.{{ $key }}.to" class="{{ $selectClass }}">
                                 <option value="">{{ __('cron-builder::cron-builder.fields.to') }}</option>
                                 @foreach ($getValueOptions($key) as $value => $optionLabel)
                                     <option value="{{ $value }}">{{ $optionLabel }}</option>
@@ -48,7 +48,7 @@
                             </select>
                         </div>
                     @elseif ($mode === 'step')
-                        <select wire:model.live="{{ $statePath }}.{{ $key }}.step" class="{{ $selectClass }}">
+                        <select {{ $applyStateBindingModifiers('wire:model') }}="{{ $statePath }}.{{ $key }}.step" class="{{ $selectClass }}">
                             <option value="">{{ __('cron-builder::cron-builder.fields.step') }}</option>
                             @foreach ($getStepOptions($key) as $value => $optionLabel)
                                 <option value="{{ $value }}">{{ $optionLabel }}</option>

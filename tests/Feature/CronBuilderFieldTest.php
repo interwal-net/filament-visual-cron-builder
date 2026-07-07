@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use InterwalNet\CronBuilder\CronBuilder;
+use InterwalNet\CronBuilder\Tests\Fixtures\AfterStateUpdatedFormComponent;
 use InterwalNet\CronBuilder\Tests\Fixtures\FormComponent;
 use InterwalNet\CronBuilder\Tests\TestCase;
 use Livewire\Livewire;
@@ -58,4 +60,31 @@ it('recomposes the cron string after a column is changed', function () {
     $state = $component->instance()->form->getState();
 
     expect($state['schedule'])->toBe('*/15 * * * *');
+});
+
+it('is live by default and honours live() overrides', function () {
+    // blur/debounce modifier syntax differs between Livewire 3 (Filament v4)
+    // and Livewire 4 (Filament v5), so only assert the parts we control.
+    expect(CronBuilder::make('schedule')->applyStateBindingModifiers('wire:model'))
+        ->toBe('wire:model.live')
+        ->and(CronBuilder::make('schedule')->live(condition: false)->applyStateBindingModifiers('wire:model'))
+        ->toBe('wire:model')
+        ->and(CronBuilder::make('schedule')->live(onBlur: true)->applyStateBindingModifiers('wire:model'))
+        ->toStartWith('wire:model')->toContain('.blur')
+        ->and(CronBuilder::make('schedule')->live(debounce: 500)->applyStateBindingModifiers('wire:model'))
+        ->toStartWith('wire:model')->toContain('.debounce.500');
+});
+
+it('renders live wire:model bindings by default', function () {
+    Livewire::test(FormComponent::class, ['data' => ['schedule' => '* * * * *']])
+        ->assertOk()
+        ->assertSee('wire:model.live="data.schedule.minute.mode"', escape: false);
+});
+
+it('fires afterStateUpdated when a nested column changes', function () {
+    $component = Livewire::test(AfterStateUpdatedFormComponent::class, ['data' => ['schedule' => '* * * * *']])
+        ->set('data.schedule.minute.mode', 'step')
+        ->set('data.schedule.minute.step', '15');
+
+    expect($component->get('captured'))->toBe('*/15 * * * *');
 });

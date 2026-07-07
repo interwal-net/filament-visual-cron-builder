@@ -14,8 +14,10 @@ use InterwalNet\CronBuilder\Support\CronExpressionBuilder as Builder;
  * It dehydrates to a standard cron string, so it is a drop-in replacement for a
  * TextInput bound to a cron column.
  *
- * The columns render as plain selects bound with wire:model.live to nested state
- * paths; every change re-renders server-side so the preview is computed in PHP.
+ * The columns render as plain selects bound with wire:model to nested state
+ * paths (live by default); every change re-renders server-side so the preview
+ * is computed in PHP. ->live(), ->afterStateUpdated() and the other state
+ * binding modifiers behave like on any other Filament field.
  */
 class CronBuilder extends Field
 {
@@ -31,6 +33,10 @@ class CronBuilder extends Field
         parent::setUp();
 
         $this->showNextRun = (bool) config('cron-builder.show_next_run', true);
+
+        // Live by default so the preview recomputes on every change. Callers can
+        // override with ->live(onBlur:/debounce:) or ->live(condition: false).
+        $this->live();
 
         // Empty value -> "every minute", never a blank field.
         $this->default('* * * * *');
