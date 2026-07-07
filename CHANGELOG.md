@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-07
+
+### Added
+
+- Multiple ranges per position (`1-5,10-12`) - a new range row appears as you
+  fill the last one; internal range state is now `ranges: [{from, to}, ...]`
+  (the legacy single `from`/`to` shape still composes).
+- Tabs layout - `->layout('tabs')` or the `cron-builder.layout` config key
+  renders one position at a time behind a tab bar with live token badges.
+
+### Changed
+
+- Specific values are now toggle chips instead of a native multi-select - no
+  more Ctrl/Cmd-click to pick multiple values.
+- Modes render as a segmented control instead of a select.
+- The field ships its styles as a plain CSS file registered through
+  `FilamentAsset`. No Tailwind build is required and the custom-theme
+  `@source` step is gone.
+- Specific value lists compose sorted and de-duplicated (`4,5,12,20`).
+
+### Fixed
+
+- Livewire DOM-diff mix-ups between columns when switching modes or adding
+  ranges (missing `wire:key` on dynamic blocks).
+
 ## [1.1.1] - 2026-07-07
 
 ### Changed
@@ -53,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ValidCronExpression` validation rule.
 - English translations, publishable config and views.
 
-[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/interwal-net/filament-visual-cron-builder/releases/tag/v1.0.0

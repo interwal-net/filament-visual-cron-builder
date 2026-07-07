@@ -5,6 +5,7 @@ declare(strict_types=1);
 use InterwalNet\CronBuilder\CronBuilder;
 use InterwalNet\CronBuilder\Tests\Fixtures\AfterStateUpdatedFormComponent;
 use InterwalNet\CronBuilder\Tests\Fixtures\FormComponent;
+use InterwalNet\CronBuilder\Tests\Fixtures\TabsFormComponent;
 use InterwalNet\CronBuilder\Tests\TestCase;
 use Livewire\Livewire;
 
@@ -19,7 +20,7 @@ it('hydrates an existing cron string into column state', function () {
         ->and($data['schedule']['hour'])->toMatchArray(['mode' => 'specific', 'values' => ['4', '12', '20']])
         ->and($data['schedule']['day']['mode'])->toBe('every')
         ->and($data['schedule']['month']['mode'])->toBe('every')
-        ->and($data['schedule']['weekday'])->toMatchArray(['mode' => 'range', 'from' => '1', 'to' => '5']);
+        ->and($data['schedule']['weekday'])->toMatchArray(['mode' => 'range', 'ranges' => [['from' => '1', 'to' => '5']]]);
 });
 
 it('dehydrates column state back to the same cron string', function () {
@@ -79,6 +80,25 @@ it('renders live wire:model bindings by default', function () {
     Livewire::test(FormComponent::class, ['data' => ['schedule' => '* * * * *']])
         ->assertOk()
         ->assertSee('wire:model.live="data.schedule.minute.mode"', escape: false);
+});
+
+it('defaults to the grid layout and accepts layout overrides', function () {
+    expect(CronBuilder::make('schedule')->getLayout())->toBe('grid')
+        ->and(CronBuilder::make('schedule')->layout('tabs')->getLayout())->toBe('tabs')
+        ->and(CronBuilder::make('schedule')->layout('nonsense')->getLayout())->toBe('grid');
+});
+
+it('reads the default layout from config', function () {
+    config()->set('cron-builder.layout', 'tabs');
+
+    expect(CronBuilder::make('schedule')->getLayout())->toBe('tabs');
+});
+
+it('renders the tab bar in tabs layout', function () {
+    Livewire::test(TabsFormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']])
+        ->assertOk()
+        ->assertSee('cb-tabbar')
+        ->assertSee('cb-tab-token');
 });
 
 it('fires afterStateUpdated when a nested column changes', function () {

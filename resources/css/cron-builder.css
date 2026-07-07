@@ -1,0 +1,381 @@
+/* Visual cron builder - self-contained styles, no Tailwind build required.
+   Colors follow the panel via Filament CSS custom properties (--primary-*, --gray-*). */
+
+.cb-root {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cb-columns {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+}
+
+.cb-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: white;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+    outline: 1px solid rgb(3 7 18 / 0.08);
+    outline-offset: -1px;
+}
+
+.dark .cb-card {
+    background: rgb(255 255 255 / 0.05);
+    outline-color: rgb(255 255 255 / 0.1);
+}
+
+.cb-card-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgb(107 114 128);
+}
+
+.dark .cb-card-label {
+    color: rgb(156 163 175);
+}
+
+/* Tabs layout */
+
+.cb-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cb-tabs [x-cloak] {
+    display: none !important;
+}
+
+.cb-tabbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 0.625rem;
+    background: rgb(3 7 18 / 0.06);
+}
+
+.dark .cb-tabbar {
+    background: rgb(255 255 255 / 0.1);
+}
+
+.cb-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 1;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.5rem;
+    background: transparent;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgb(107 114 128);
+    transition: color 0.15s, background 0.15s;
+}
+
+.cb-tab:hover {
+    color: rgb(31 41 55);
+}
+
+.dark .cb-tab {
+    color: rgb(156 163 175);
+}
+
+.dark .cb-tab:hover {
+    color: rgb(229 231 235);
+}
+
+.cb-tab--active,
+.cb-tab--active:hover {
+    background: white;
+    color: rgb(3 7 18);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+.dark .cb-tab--active,
+.dark .cb-tab--active:hover {
+    background: rgb(255 255 255 / 0.2);
+    color: white;
+}
+
+.cb-tab-token {
+    border-radius: 0.25rem;
+    background: rgb(3 7 18 / 0.06);
+    padding: 0.05rem 0.3rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.68rem;
+    color: rgb(107 114 128);
+}
+
+.cb-tab--active .cb-tab-token {
+    background: var(--primary-600, #4f46e5);
+    color: white;
+}
+
+.dark .cb-tab-token {
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(156 163 175);
+}
+
+/* Mode: segmented control */
+
+.cb-modes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px;
+    padding: 2px;
+    border-radius: 0.5rem;
+    background: rgb(3 7 18 / 0.06);
+}
+
+.dark .cb-modes {
+    background: rgb(255 255 255 / 0.1);
+}
+
+.cb-mode {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 0.375rem;
+    padding: 0.3rem 0.15rem;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgb(107 114 128);
+    transition: color 0.15s, background 0.15s;
+}
+
+.cb-mode:hover {
+    color: rgb(31 41 55);
+}
+
+.dark .cb-mode {
+    color: rgb(156 163 175);
+}
+
+.dark .cb-mode:hover {
+    color: rgb(229 231 235);
+}
+
+.cb-mode--active,
+.cb-mode--active:hover {
+    background: white;
+    color: rgb(3 7 18);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+.dark .cb-mode--active,
+.dark .cb-mode--active:hover {
+    background: rgb(255 255 255 / 0.2);
+    color: white;
+}
+
+/* "Every" hint */
+
+.cb-any {
+    padding: 0.25rem 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgb(156 163 175);
+}
+
+.dark .cb-any {
+    color: rgb(107 114 128);
+}
+
+.cb-any code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Specific: value chips */
+
+.cb-chips {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.cb-chip {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.2rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: rgb(55 65 81);
+    outline: 1px solid rgb(3 7 18 / 0.1);
+    outline-offset: -1px;
+    transition: background 0.1s, color 0.1s;
+}
+
+.cb-chip:hover {
+    background: rgb(3 7 18 / 0.04);
+}
+
+.dark .cb-chip {
+    color: rgb(209 213 219);
+    outline-color: rgb(255 255 255 / 0.2);
+}
+
+.dark .cb-chip:hover {
+    background: rgb(255 255 255 / 0.08);
+}
+
+.cb-chip--on,
+.cb-chip--on:hover,
+.dark .cb-chip--on,
+.dark .cb-chip--on:hover {
+    background: var(--primary-600, #4f46e5);
+    color: white;
+    font-weight: 600;
+    outline: none;
+}
+
+/* Range rows + step row */
+
+.cb-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.cb-row {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.cb-row-sep {
+    color: rgb(156 163 175);
+}
+
+.cb-row-label {
+    font-size: 0.75rem;
+    color: rgb(107 114 128);
+}
+
+.dark .cb-row-label {
+    color: rgb(156 163 175);
+}
+
+.cb-select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    border: none;
+    border-radius: 0.5rem;
+    background: white;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.8rem;
+    color: rgb(3 7 18);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+    outline: 1px solid rgb(3 7 18 / 0.1);
+    outline-offset: -1px;
+}
+
+.cb-select:focus {
+    outline: 2px solid var(--primary-600, #4f46e5);
+}
+
+.dark .cb-select {
+    background: rgb(255 255 255 / 0.05);
+    color: white;
+    outline-color: rgb(255 255 255 / 0.2);
+}
+
+.dark .cb-select option {
+    background: rgb(17 24 39);
+}
+
+/* Preview */
+
+.cb-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    background: rgb(3 7 18 / 0.03);
+    padding: 1rem;
+    outline: 1px solid rgb(3 7 18 / 0.05);
+    outline-offset: -1px;
+}
+
+.dark .cb-preview {
+    background: rgb(255 255 255 / 0.05);
+    outline-color: rgb(255 255 255 / 0.1);
+}
+
+.cb-preview-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(3 7 18);
+}
+
+.dark .cb-preview-text {
+    color: white;
+}
+
+.cb-preview-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.25rem;
+}
+
+.cb-expression {
+    border-radius: 0.375rem;
+    background: rgb(3 7 18 / 0.06);
+    padding: 0.25rem 0.5rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem;
+    color: rgb(55 65 81);
+}
+
+.dark .cb-expression {
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(229 231 235);
+}
+
+.cb-next-run {
+    font-size: 0.75rem;
+    color: rgb(107 114 128);
+}
+
+.dark .cb-next-run {
+    color: rgb(156 163 175);
+}
+
+/* Invisible inputs stretched over their label - full-size native click target */
+
+.cb-mode > input,
+.cb-chip > input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.cb-mode:has(> input:focus-visible),
+.cb-chip:has(> input:focus-visible) {
+    outline: 2px solid var(--primary-600, #4f46e5);
+    outline-offset: 1px;
+}

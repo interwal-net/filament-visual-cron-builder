@@ -28,11 +28,14 @@ class CronBuilder extends Field
 
     protected bool $showNextRun = true;
 
+    protected string $layout = 'grid';
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->showNextRun = (bool) config('cron-builder.show_next_run', true);
+        $this->layout((string) config('cron-builder.layout', 'grid'));
 
         // Live by default so the preview recomputes on every change. Callers can
         // override with ->live(onBlur:/debounce:) or ->live(condition: false).
@@ -57,6 +60,19 @@ class CronBuilder extends Field
         $this->showNextRun = $condition;
 
         return $this;
+    }
+
+    /** @param 'grid'|'tabs' $layout */
+    public function layout(string $layout): static
+    {
+        $this->layout = in_array($layout, ['grid', 'tabs'], true) ? $layout : 'grid';
+
+        return $this;
+    }
+
+    public function getLayout(): string
+    {
+        return $this->layout;
     }
 
     public function shouldShowNextRun(): bool
@@ -89,9 +105,18 @@ class CronBuilder extends Field
         $columns = [];
 
         foreach (self::POSITION_KEYS as $key) {
-            $columns[$key] = is_array($state[$key] ?? null)
+            $column = is_array($state[$key] ?? null)
                 ? [...Builder::defaultField(), ...$state[$key]]
                 : Builder::defaultField();
+
+            // Drop range rows the user cleared out completely, keep half-filled ones.
+            $column['ranges'] = array_values(array_filter(
+                is_array($column['ranges']) ? $column['ranges'] : [],
+                static fn ($range): bool => is_array($range)
+                    && (trim((string) ($range['from'] ?? '')) !== '' || trim((string) ($range['to'] ?? '')) !== ''),
+            ));
+
+            $columns[$key] = $column;
         }
 
         return $columns;
@@ -163,6 +188,18 @@ class CronBuilder extends Field
             ],
             default => self::numericOptions(0, 59),
         };
+    }
+
+    /** Compact labels for the chip grid (short month/weekday names). @return array<string,string> */
+    public function getChipOptions(string $key): array
+    {
+        $options = $this->getValueOptions($key);
+
+        if (in_array($key, ['month', 'weekday'], true)) {
+            return array_map(static fn (string $label): string => substr($label, 0, 3), $options);
+        }
+
+        return $options;
     }
 
     /** Step options for a position. @return array<string,string> */

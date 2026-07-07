@@ -13,8 +13,7 @@ use Cron\CronExpression;
  *   [
  *     'mode'   => 'every'|'specific'|'range'|'step',
  *     'values' => string[],   // specific:  ['1','15','30']
- *     'from'   => ?string,    // range:     '1'
- *     'to'     => ?string,    // range:     '5'
+ *     'ranges' => array[],    // range:     [['from' => '1', 'to' => '5'], ...]
  *     'step'   => ?string,    // step:      '15'
  *     'base'   => string,     // step base: '*' (default) or e.g. '1-30'
  *   ]
@@ -33,15 +32,14 @@ class CronExpressionBuilder
      * Canonical empty field state. Both compose() input and parse() output use this
      * shape so parse(compose($fields)) === $fields holds for UI-generable states.
      *
-     * @return array{mode:string,values:array<int,string>,from:?string,to:?string,step:?string,base:string}
+     * @return array{mode:string,values:array<int,string>,ranges:array<int,array{from:?string,to:?string}>,step:?string,base:string}
      */
     public static function defaultField(): array
     {
         return [
             'mode' => 'every',
             'values' => [],
-            'from' => null,
-            'to' => null,
+            'ranges' => [],
             'step' => null,
             'base' => '*',
         ];
@@ -54,11 +52,16 @@ class CronExpressionBuilder
      */
     public static function composeField(array $field): string
     {
+        // Legacy single-range shape ('from'/'to' keys) from before multi-range support.
+        if (($field['from'] ?? null) !== null && ! isset($field['ranges'])) {
+            $field['ranges'] = [['from' => $field['from'], 'to' => $field['to'] ?? null]];
+        }
+
         $field = [...self::defaultField(), ...$field];
 
         return match ($field['mode']) {
             'specific' => self::composeSpecific($field['values']),
-            'range' => self::composeRange($field['from'], $field['to']),
+            'range' => self::composeRanges($field['ranges']),
             'step' => self::composeStep($field['base'], $field['step']),
             default => '*',
         };
@@ -84,7 +87,7 @@ class CronExpressionBuilder
     /**
      * One cron token -> field state.
      *
-     * @return array{mode:string,values:array<int,string>,from:?string,to:?string,step:?string,base:string}
+     * @return array{mode:string,values:array<int,string>,ranges:array<int,array{from:?string,to:?string}>,step:?string,base:string}
      */
     public static function parseField(string $token): array
     {
@@ -105,14 +108,25 @@ class CronExpressionBuilder
             return $field;
         }
 
-        // Pure range: a-b (no list).
-        if (str_contains($token, '-') && ! str_contains($token, ',')) {
-            [$from, $to] = explode('-', $token, 2);
-            $field['mode'] = 'range';
-            $field['from'] = $from;
-            $field['to'] = $to;
+        // Range list: every comma part is a plain a-b range ("1-5" or "1-5,10-12").
+        if (str_contains($token, '-')) {
+            $ranges = [];
 
-            return $field;
+            foreach (explode(',', $token) as $part) {
+                if (! preg_match('/^(\d+)-(\d+)$/', trim($part), $matches)) {
+                    $ranges = null;
+                    break;
+                }
+
+                $ranges[] = ['from' => $matches[1], 'to' => $matches[2]];
+            }
+
+            if ($ranges !== null) {
+                $field['mode'] = 'range';
+                $field['ranges'] = $ranges;
+
+                return $field;
+            }
         }
 
         // Everything else (single value, list, or mixed list) -> specific value list.
@@ -128,7 +142,7 @@ class CronExpressionBuilder
     /**
      * "m h dom mon dow" -> five field states keyed 0..4.
      *
-     * @return array<int,array{mode:string,values:array<int,string>,from:?string,to:?string,step:?string,base:string}>
+     * @return array<int,array{mode:string,values:array<int,string>,ranges:array<int,array{from:?string,to:?string}>,step:?string,base:string}>
      */
     public static function parse(string $cron): array
     {
@@ -150,16 +164,30 @@ class CronExpressionBuilder
             static fn (string $v): bool => $v !== '',
         ));
 
+        // Numeric lists sort ascending; mixed/raw tokens keep their order.
+        if ($values !== [] && array_filter($values, static fn (string $v): bool => ! ctype_digit($v)) === []) {
+            sort($values, SORT_NUMERIC);
+            $values = array_values(array_unique($values));
+        }
+
         return $values === [] ? '*' : implode(',', $values);
     }
 
-    private static function composeRange(?string $from, ?string $to): string
+    /** @param array<int,array{from?:?string,to?:?string}> $ranges */
+    private static function composeRanges(array $ranges): string
     {
-        if ($from === null || $from === '' || $to === null || $to === '') {
-            return '*';
+        $tokens = [];
+
+        foreach ($ranges as $range) {
+            $from = trim((string) ($range['from'] ?? ''));
+            $to = trim((string) ($range['to'] ?? ''));
+
+            if ($from !== '' && $to !== '') {
+                $tokens[] = "{$from}-{$to}";
+            }
         }
 
-        return "{$from}-{$to}";
+        return $tokens === [] ? '*' : implode(',', $tokens);
     }
 
     private static function composeStep(string $base, ?string $step): string
@@ -276,10 +304,12 @@ class CronExpressionBuilder
             }
         }
 
-        // List a,b,c
+        // List a,b,c - parts may themselves be ranges ("1-5,0").
         if (str_contains($token, ',')) {
             $labels = array_map(
-                static fn (string $v): string => ctype_digit(trim($v)) ? ($names[(int) trim($v)] ?? $v) : $v,
+                static fn (string $v): string => ctype_digit(trim($v))
+                    ? ($names[(int) trim($v)] ?? $v)
+                    : self::describeNamed(trim($v), $names),
                 explode(',', $token),
             );
 

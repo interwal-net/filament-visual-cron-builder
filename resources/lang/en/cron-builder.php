@@ -23,6 +23,7 @@ return [
         'from' => 'From',
         'to' => 'To',
         'step' => 'Every',
+        'any' => 'Any value',
     ],
 
     'preview' => 'Schedule',

@@ -13,12 +13,17 @@ to a cron column: its saved state is a standard 5-field cron string.
 
 ## Features
 
-- 5 columns - minute, hour, day-of-month, month, day-of-week.
-- Each column has a mode: **Every** (`*`), **Specific** (`1,15,30`), **Range**
-  (`1-5`), **Step** (`*/15`).
+- 5 positions - minute, hour, day-of-month, month, day-of-week.
+- Each position has a mode: **Every** (`*`), **Specific** (`1,15,30` - toggle
+  chips, no Ctrl-click), **Range** (`1-5,10-12` - multiple ranges, a new row
+  appears as you fill the last one), **Step** (`*/15`).
+- Two layouts: side-by-side **grid** (default) or compact **tabs** - per field
+  or via config.
 - Live human-readable preview + raw expression + optional next-run date.
 - Round-trips: editing a record parses the existing string back into the columns.
 - All compose/parse/validation logic is plain, unit-tested PHP.
+- Styles ship as a small plain-CSS file through `FilamentAsset` - no Tailwind
+  build or theme configuration required.
 
 ## Compatibility
 
@@ -43,10 +48,6 @@ php artisan vendor:publish --tag=cron-builder-config
 php artisan vendor:publish --tag=cron-builder-views
 ```
 
-> Custom panel theme: add the package views to your theme's `@source` paths so
-> Tailwind keeps the field's classes:
-> `@source '../../../../vendor/interwal-net/filament-visual-cron-builder/resources/views/**/*';`
-
 ## Usage
 
 ```php
@@ -54,6 +55,7 @@ use InterwalNet\CronBuilder\CronBuilder;
 
 CronBuilder::make('schedule')
     ->showNextRun()      // toggle the next-run preview (default: from config)
+    ->layout('tabs')     // 'grid' (default) or 'tabs'; default from config
     ->required();
 ```
 
