@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fill the last one; internal range state is now `ranges: [{from, to}, ...]`
   (the legacy single `from`/`to` shape still composes).
 - Tabs layout - `->layout('tabs')` or the `cron-builder.layout` config key
-  renders one position at a time behind a tab bar with live token badges.
+  renders one position at a time behind a tab bar. Optional live token badges
+  in the tab headers via `->showTabTokens()` or `cron-builder.show_tab_tokens`
+  (off by default).
 
 ### Changed
 

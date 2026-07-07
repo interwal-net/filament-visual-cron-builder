@@ -56,6 +56,7 @@ use InterwalNet\CronBuilder\CronBuilder;
 CronBuilder::make('schedule')
     ->showNextRun()      // toggle the next-run preview (default: from config)
     ->layout('tabs')     // 'grid' (default) or 'tabs'; default from config
+    ->showTabTokens()    // tabs only: show each position's cron token in its tab
     ->required();
 ```
 

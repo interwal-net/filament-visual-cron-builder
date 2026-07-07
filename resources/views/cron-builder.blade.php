@@ -34,7 +34,9 @@
                             x-on:click="tab = @js($key)"
                         >
                             {{ $label }}
-                            <span class="cb-tab-token">{{ Builder::composeField($columns[$key]) }}</span>
+                            @if ($shouldShowTabTokens())
+                                <span class="cb-tab-token">{{ Builder::composeField($columns[$key]) }}</span>
+                            @endif
                         </button>
                     @endforeach
                 </div>

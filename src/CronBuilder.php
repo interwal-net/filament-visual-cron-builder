@@ -30,12 +30,15 @@ class CronBuilder extends Field
 
     protected string $layout = 'grid';
 
+    protected bool $showTabTokens = false;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->showNextRun = (bool) config('cron-builder.show_next_run', true);
         $this->layout((string) config('cron-builder.layout', 'grid'));
+        $this->showTabTokens = (bool) config('cron-builder.show_tab_tokens', false);
 
         // Live by default so the preview recomputes on every change. Callers can
         // override with ->live(onBlur:/debounce:) or ->live(condition: false).
@@ -73,6 +76,18 @@ class CronBuilder extends Field
     public function getLayout(): string
     {
         return $this->layout;
+    }
+
+    public function showTabTokens(bool $condition = true): static
+    {
+        $this->showTabTokens = $condition;
+
+        return $this;
+    }
+
+    public function shouldShowTabTokens(): bool
+    {
+        return $this->showTabTokens;
     }
 
     public function shouldShowNextRun(): bool

@@ -94,11 +94,24 @@ it('reads the default layout from config', function () {
     expect(CronBuilder::make('schedule')->getLayout())->toBe('tabs');
 });
 
-it('renders the tab bar in tabs layout', function () {
+it('renders the tab bar in tabs layout, without tokens by default', function () {
     Livewire::test(TabsFormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']])
         ->assertOk()
         ->assertSee('cb-tabbar')
+        ->assertDontSee('cb-tab-token');
+});
+
+it('shows tab tokens when enabled via config', function () {
+    config()->set('cron-builder.show_tab_tokens', true);
+
+    Livewire::test(TabsFormComponent::class, ['data' => ['schedule' => '*/15 4,12,20 * * 1-5']])
+        ->assertOk()
         ->assertSee('cb-tab-token');
+});
+
+it('exposes the showTabTokens override', function () {
+    expect(CronBuilder::make('schedule')->shouldShowTabTokens())->toBeFalse()
+        ->and(CronBuilder::make('schedule')->showTabTokens()->shouldShowTabTokens())->toBeTrue();
 });
 
 it('fires afterStateUpdated when a nested column changes', function () {

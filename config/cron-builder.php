@@ -20,4 +20,14 @@ return [
     | with ->layout('tabs').
     */
     'layout' => 'grid',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show cron tokens in tab headers
+    |--------------------------------------------------------------------------
+    | In the tabs layout, show each position's current cron token as a badge
+    | next to the tab label. Can be overridden per field with
+    | ->showTabTokens().
+    */
+    'show_tab_tokens' => false,
 ];

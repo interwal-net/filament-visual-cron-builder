@@ -34,6 +34,7 @@ class ScheduleResource extends Resource
 
             CronBuilder::make('schedule')
                 ->showNextRun()
+                ->layout('tabs')
                 ->required(),
         ]);
     }
