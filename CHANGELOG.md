@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-07
+
+### Changed
+
+- Dropped Laravel 11 support (`illuminate/contracts: ^12.0 || ^13.0`). Laravel 11
+  reached end of security support in March 2026 and every 11.x release carries
+  open security advisories, which blocks installation under Composer's default
+  advisory policy.
+
 ## [1.1.0] - 2026-07-07
 
 ### Added
@@ -44,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ValidCronExpression` validation rule.
 - English translations, publishable config and views.
 
-[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/interwal-net/filament-visual-cron-builder/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/interwal-net/filament-visual-cron-builder/releases/tag/v1.0.0

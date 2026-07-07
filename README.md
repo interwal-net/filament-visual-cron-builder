@@ -22,10 +22,10 @@ to a cron column: its saved state is a standard 5-field cron string.
 
 ## Compatibility
 
-| Package | Filament  | Livewire            | Laravel        | PHP                          |
-|---------|-----------|---------------------|----------------|------------------------------|
-| 1.1+    | 4.x / 5.x | 3.x (F4) / 4.x (F5) | 11.28+, 12, 13 | 8.2+ (Laravel 13 needs 8.3+) |
-| 1.0     | 4.x       | 3.x                 | 11, 12         | 8.2+                         |
+| Package | Filament  | Livewire            | Laravel | PHP                          |
+|---------|-----------|---------------------|---------|------------------------------|
+| 1.1+    | 4.x / 5.x | 3.x (F4) / 4.x (F5) | 12, 13  | 8.2+ (Laravel 13 needs 8.3+) |
+| 1.0     | 4.x       | 3.x                 | 11, 12  | 8.2+                         |
 
 Livewire is not a direct dependency - the correct major is pulled in by the
 Filament version you install.
